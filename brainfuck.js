@@ -1,8 +1,16 @@
+
+/*
+# Brainfuck.coffee
+# Ver 0.1.2
+*/
+
 (function() {
   var Brainfuck;
 
   Brainfuck = function(src) {
     var at, back, ch, error, exec, index, memory, next, result;
+    src = src.replace(/#.*?\n/g, '');
+    src = src.replace(/[\s\t\n]*/g, '');
     at = 0;
     ch = src.charAt(0);
     memory = [];
@@ -11,10 +19,13 @@
     error = function(message) {
       if (message == null) message = "error";
       throw {
+        src: src,
         at: at,
         ch: ch,
-        index: index,
         memory: memory,
+        index: index,
+        result: result,
+        charCodeAt: src.charCodeAt(at),
         message: message
       };
     };
@@ -73,6 +84,9 @@
               }
             }
           }
+          break;
+        default:
+          error("Syntax error");
       }
       next();
       if (ch !== '') exec();

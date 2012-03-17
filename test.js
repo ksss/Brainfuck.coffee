@@ -3,7 +3,7 @@
 
   fs = require('fs');
 
-  Brainfuck = require("./brainfuck").Brainfuck;
+  Brainfuck = require("./brainfuck.coffee").Brainfuck;
 
   try {
     c = 0;
@@ -15,7 +15,7 @@
       } else {
         console.log("not ok " + c);
         console.log("### left is " + l);
-        return console.log("### left is " + r);
+        return console.log("### right is " + r);
       }
     };
     ret = Brainfuck(".+.++.+++.---.");
@@ -24,21 +24,21 @@
     ok(ret.join(','), "0,1,3,6,3");
     ret = Brainfuck(">>+++>+++++>.<<.>.");
     ok(ret.join(','), "0,3,5");
+    ret = Brainfuck(">>+++>#foo\n+++#comment\n++>.<<.>.");
+    ok(ret.join(','), "0,3,5");
     ret = Brainfuck("<<<+++.");
     ok(ret.join(','), "3");
-    ret = Brainfuck("+++[>+++<-].");
+    ret = Brainfuck("+	+   +[>\n+ ++					<-].");
     ok(ret.join(','), "0");
     Brainfuck.read = function(path) {
-      return fs.readFile(path, 'utf-8', function(error, data) {
-        if (error) throw error;
-        return Brainfuck(data);
-      });
+      var data;
+      data = fs.readFileSync(path, 'utf-8');
+      return Brainfuck(data);
     };
-    ret = Brainfuck.read("./hello.bf", function(data) {
-      return ok(ret.map(function(a) {
-        return String.fromCharCode(a);
-      }).join(''), "Hello World!");
-    });
+    ret = Brainfuck.read("./hello.bf");
+    ok(ret.map(function(a) {
+      return String.fromCharCode(a);
+    }).join(''), "Hello World!");
   } catch (ex) {
     console.log(ex);
   }

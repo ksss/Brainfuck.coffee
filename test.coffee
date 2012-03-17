@@ -1,7 +1,7 @@
 #! /usr/bin/env coffee
 
 fs = require 'fs'
-{Brainfuck} = require "./brainfuck"
+{Brainfuck} = require "./brainfuck.coffee"
 
 try
   c = 0
@@ -12,7 +12,7 @@ try
     else
       console.log("not ok #{c}")
       console.log("### left is #{l}")
-      console.log("### left is #{r}")
+      console.log("### right is #{r}")
   
   ret = Brainfuck(".+.++.+++.---.")
   ok Array.isArray(ret)
@@ -21,16 +21,18 @@ try
   
   ret = Brainfuck(">>+++>+++++>.<<.>.")
   ok ret.join(','), "0,3,5"
+  ret = Brainfuck(">>+++>#foo\n+++#comment\n++>.<<.>.")
+  ok ret.join(','), "0,3,5"
   ret = Brainfuck("<<<+++.")
   ok ret.join(','), "3"
-  ret = Brainfuck("+++[>+++<-].")
+  ret = Brainfuck("+	+   +[>\n+ ++					<-].")
   ok ret.join(','), "0"
   Brainfuck.read = (path) ->
-    fs.readFile path, 'utf-8', (error, data) ->
-      throw error if error
-      Brainfuck(data)
+    data = fs.readFileSync path, 'utf-8'
+    Brainfuck(data)
 
-  ret = Brainfuck.read "./hello.bf", (data) ->
-    ok ret.map((a) -> String.fromCharCode(a)).join(''), "Hello World!"
+  ret = Brainfuck.read "./hello.bf"
+  ok ret.map((a) -> String.fromCharCode(a)).join(''), "Hello World!"
+
 catch ex
   console.log(ex)

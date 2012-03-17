@@ -1,4 +1,10 @@
+###
+# Brainfuck.coffee
+# Ver 0.1.2
+###
 Brainfuck = (src) ->
+  src = src.replace(/#.*?\n/g, '')
+  src = src.replace(/[\s\t\n]*/g, '')
   at = 0
   ch = src.charAt(0)
   memory = []
@@ -7,12 +13,16 @@ Brainfuck = (src) ->
 
   error = (message = "error") ->
     throw {
+      src: src
       at: at
       ch: ch
-      index: index
       memory: memory
+      index: index
+      result: result
+      charCodeAt: src.charCodeAt(at)
       message: message
     }
+
   next = ->
     at += 1
     ch = src.charAt(at)
@@ -23,7 +33,6 @@ Brainfuck = (src) ->
 
   exec = ->
     memory[index] ?= 0
-    
     switch ch
       when '.' then result.push memory[index]
       when '+' then memory[index] += 1
@@ -51,9 +60,13 @@ Brainfuck = (src) ->
                 back()
                 break
               depth -= 1
+      else
+        error("Syntax error")
+
     next()
     exec() if ch isnt ''
     result
+
   exec()
 
 this.Brainfuck = Brainfuck
