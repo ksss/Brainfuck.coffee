@@ -6,13 +6,13 @@ Brainfuck = (src) ->
   result = []
 
   error = (message = "error") ->
-    throw
+    throw {
       at: at
       ch: ch
       index: index
       memory: memory
       message: message
-
+    }
   next = ->
     at += 1
     ch = src.charAt(at)

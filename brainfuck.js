@@ -11,9 +11,7 @@
     error = function(message) {
       if (message == null) message = "error";
       throw {
-        at: at
-      };
-      return {
+        at: at,
         ch: ch,
         index: index,
         memory: memory,
