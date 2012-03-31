@@ -2,6 +2,7 @@
 # Brainfuck.coffee
 # Author ksss (co000ri@gmail.com)
 ###
+
 class Brainfuck
   constructor: (redefine) ->
     @set =
@@ -15,9 +16,9 @@ class Brainfuck
     if redefine?
       for key, value of redefine
         unless @set[key]
-          throw "redefine error \'#{key}\': can't set other then brainfuck char"
+          throw "Redefine error \'#{key}\': can't set other then brainfuck char"
         unless value.length is 1
-          throw "redefine error \'#{value}\': redefine can only one length char"
+          throw "Redefine error \'#{value}\': redefine can only one length char"
         @set[key] = value
 
   syntax: (src) ->
@@ -41,9 +42,9 @@ class Brainfuck
     memory = []
     index = 0
     result = []
-    self = this
+    self = @
 
-    error = (message = "error") ->
+    error = (message = "Error") ->
       throw {
         src: src
         set: self.set
@@ -64,9 +65,9 @@ class Brainfuck
       at -= 1
       ch = src.charAt at
 
-    exec = ()->
+    exec = ->
       if index < 0
-        error "can not use minus memory"
+        error "Can not use minus memory"
       memory[index] ?= 0
 
       switch ch
@@ -103,11 +104,11 @@ class Brainfuck
       exec() if ch isnt ''
       result
 
-    unless this.syntax src
+    unless @syntax src
       error("Syntax error")
 
     exec()
 
-Brainfuck.varsion = "0.2.0"
+Brainfuck.varsion = "0.2.1"
 
-this.Brainfuck = Brainfuck
+@Brainfuck = Brainfuck
