@@ -1,2 +1,16 @@
-Brainfuck.js
-============
+Brainfuck.coffee
+================
+
+bf = new Brainfuck()
+
+bf.eval("+++.") // => [3]
+
+bf.eval("+++.>++.<--.") // => [3, 2, 1]
+
+bf.eval("+++.>++.<--.", (v) -> v * v) // [9, 4, 1]
+
+rebf = new Brainfuck({
+  '+': 'a',
+  '-': 'b'
+})
+rebf.eval("aaa.>aa.<bb.") // [3, 2, 1]
